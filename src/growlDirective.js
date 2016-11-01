@@ -9,7 +9,12 @@ angular.module("angular-growl").directive("growl", [
       scope: {
         reference: '@',
         inline: '=',
-        limitMessages: '='
+        limitMessages: '=',
+        successClass: '@',
+        infoClass: '@',
+        warningClass: '@',
+        errorClass: '@',
+        dangerClass: '@'
       },
       controller: ['$scope', '$interval', 'growl', 'growlMessages',
         function ($scope, $interval, growl, growlMessages) {
@@ -40,16 +45,33 @@ angular.module("angular-growl").directive("growl", [
             }
           };
 
+          var defaultClasses = {
+            success: 'alert-success',
+            info: 'alert-info',
+            warning: 'alert-warning',
+            error: 'alert-error',
+            danger: 'alert-danger'
+          };
+          
           $scope.alertClasses = function (message) {
-            return {
-              'alert-success': message.severity === "success",
-              'alert-error': message.severity === "error", //bootstrap 2.3
-              'alert-danger': message.severity === "error", //bootstrap 3
-              'alert-info': message.severity === "info",
-              'alert-warning': message.severity === "warning", //bootstrap 3, no effect in bs 2.3
+            var _successClass = $scope.successClass || defaultClasses.success;
+            var _infoClass = $scope.infoClass || defaultClasses.info;
+            var _warningClass = $scope.warningClass || defaultClasses.warning;
+            var _errorClass = $scope.errorClass || defaultClasses.error;
+            var _dangerClass = $scope.dangerClass || defaultClasses.danger;
+            
+            var _alertClasses = {
               'icon': message.disableIcons === false,
               'alert-dismissable': !message.disableCloseButton
             };
+            
+            _alertClasses[_successClass] = message.severity === "success";
+            _alertClasses[_errorClass] = message.severity === "error"; //bootstrap 2.3
+            _alertClasses[_dangerClass] = message.severity === "error"; //bootstrap 3
+            _alertClasses[_infoClass] = message.severity === "info";
+            _alertClasses[_warningClass] = message.severity === "warning"; //bootstrap 3, no effect in bs 2.3
+            
+            return _alertClasses;
           };
 
           $scope.showCountDown = function (message) {
