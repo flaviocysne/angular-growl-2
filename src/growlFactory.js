@@ -279,6 +279,13 @@ angular.module("angular-growl").provider("growl", function () {
         position: _config.position || _position,
         referenceId: _config.referenceId || _referenceId,
         translateMessage: _config.translateMessage === undefined ? _translateMessages : _config.translateMessage,
+        styleClasses: {
+          success: (_config.styleClasses === undefined || _config.styleClasses.success === undefined) ? _styleClasses.success : _config.styleClasses.success,
+          info: (_config.styleClasses === undefined || _config.styleClasses.info === undefined) ? _styleClasses.info : _config.styleClasses.info,
+          warning: (_config.styleClasses === undefined || _config.styleClasses.warning === undefined) ? _styleClasses.warning : _config.styleClasses.warning,
+          error: (_config.styleClasses === undefined || _config.styleClasses.success.error === undefined) ? _styleClasses.error : _config.styleClasses.error,
+          danger: (_config.styleClasses === undefined || _config.styleClasses.success.danger === undefined) ? _styleClasses.danger : _config.styleClasses.danger,
+        },
         destroy: function () {
           growlMessages.deleteMessage(message);
         },
@@ -389,6 +396,10 @@ angular.module("angular-growl").provider("growl", function () {
     function position () {
       return _position;
     }
+    
+    function styleClasses () {
+      return _styleClasses;
+    }
 
     return {
       warning: warning,
@@ -400,7 +411,8 @@ angular.module("angular-growl").provider("growl", function () {
       onlyUnique: onlyUnique,
       reverseOrder: reverseOrder,
       inlineMessages: inlineMessages,
-      position: position
+      position: position,
+      styleClasses: styleClasses
     };
   }];
 });
