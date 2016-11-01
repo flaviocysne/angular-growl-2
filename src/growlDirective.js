@@ -44,21 +44,15 @@ angular.module("angular-growl").directive("growl", [
               }
             }
           };
-
-          var defaultClasses = {
-            success: 'alert-success',
-            info: 'alert-info',
-            warning: 'alert-warning',
-            error: 'alert-error',
-            danger: 'alert-danger'
-          };
           
           $scope.alertClasses = function (message) {
-            var _successClass = $scope.successClass || defaultClasses.success;
-            var _infoClass = $scope.infoClass || defaultClasses.info;
-            var _warningClass = $scope.warningClass || defaultClasses.warning;
-            var _errorClass = $scope.errorClass || defaultClasses.error;
-            var _dangerClass = $scope.dangerClass || defaultClasses.danger;
+            var _alertClasses = {};
+            
+            var _successClass = $scope.successClass === undefined ? growl.styleClasses().success : $scope.successClass;
+            var _infoClass = $scope.infoClass === undefined ? growl.styleClasses().info : $scope.infoClass;
+            var _warningClass = $scope.warningClass === undefined ? growl.styleClasses().warning : $scope.warningClass;
+            var _errorClass = $scope.errorClass === undefined ? growl.styleClasses().error : $scope.errorClass;
+            var _dangerClass = $scope.dangerClass === undefined ? growl.styleClasses().danger : $scope.dangerClass;
             
             var _alertClasses = {
               'icon': message.disableIcons === false,
