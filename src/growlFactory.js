@@ -17,7 +17,9 @@ angular.module("angular-growl").provider("growl", function () {
     _disableIcons = false,
     _reverseOrder = false,
     _disableCountDown = false,
-    _translateMessages = true;
+    _translateMessages = true,
+    _styleClasses = {success: 'alert-success', info: 'alert-info', warning: 'alert-warning',
+                     error: 'alert-error', danger: 'alert-danger'};
 
   /**
    * set a global timeout (time to live) after which messages will be automatically closed
@@ -120,6 +122,30 @@ angular.module("angular-growl").provider("growl", function () {
     _position = position;
     return this;
   };
+  
+  /**
+   * sets the style classes to use related to a severity.
+   * 'danger' and 'error' are related to error severity, but have distinct styles
+   * 
+   *
+   * @param {object} styleClasses default: 
+   *     {success: 'alert-success', info: 'alert-info', warning: 'alert-warning',
+   *      error: 'alert-error', danger: 'alert-danger'}
+   */
+  this.globalStyleClasses = function (styleClasses) {
+    if (styleClasses) {
+      // only change the styles defined by the user
+      // if not added to customized object then don't change default one
+      _styleClasses.success = styleClasses.success || _styleClasses.success;
+      _styleClasses.info = styleClasses.info || _styleClasses.info;
+      _styleClasses.warning = styleClasses.warning || _styleClasses.warning;
+      _styleClasses.error = styleClasses.error || _styleClasses.error;
+      _styleClasses.danger = styleClasses.danger || _styleClasses.danger;
+    }
+    return this;
+  };
+
+  
   /**
    * sets the key in $http response the serverMessagesInterecptor is looking for server-sent messages, value of key
    * needs to be an array of objects
