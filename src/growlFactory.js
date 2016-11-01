@@ -283,8 +283,8 @@ angular.module("angular-growl").provider("growl", function () {
           success: (_config.styleClasses === undefined || _config.styleClasses.success === undefined) ? _styleClasses.success : _config.styleClasses.success,
           info: (_config.styleClasses === undefined || _config.styleClasses.info === undefined) ? _styleClasses.info : _config.styleClasses.info,
           warning: (_config.styleClasses === undefined || _config.styleClasses.warning === undefined) ? _styleClasses.warning : _config.styleClasses.warning,
-          error: (_config.styleClasses === undefined || _config.styleClasses.success.error === undefined) ? _styleClasses.error : _config.styleClasses.error,
-          danger: (_config.styleClasses === undefined || _config.styleClasses.success.danger === undefined) ? _styleClasses.danger : _config.styleClasses.danger,
+          error: (_config.styleClasses === undefined || _config.styleClasses.error === undefined) ? _styleClasses.error : _config.styleClasses.error,
+          danger: (_config.styleClasses === undefined || _config.styleClasses.danger === undefined) ? _styleClasses.danger : _config.styleClasses.danger,
         },
         destroy: function () {
           growlMessages.deleteMessage(message);
