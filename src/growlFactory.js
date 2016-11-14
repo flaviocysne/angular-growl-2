@@ -147,10 +147,13 @@ angular.module("angular-growl").provider("growl", function () {
     if (iconClasses) {
       // only change the styles defined by the user
       // if not added to customized object then don't change default one
-      _iconClasses.success = iconClasses.success || _iconClasses.success;
-      _iconClasses.info = iconClasses.info || _iconClasses.info;
-      _iconClasses.warning = iconClasses.warning || _iconClasses.warning;
-      _iconClasses.error = iconClasses.error || _iconClasses.error;
+      if (typeof iconClasses === 'object') {
+        for (var k in iconClasses) {
+          if (iconClasses.hasOwnProperty(k)) {
+            _iconClasses[k] = iconClasses[k];
+          }
+        }
+      }
     }
     return this;
   };
@@ -166,10 +169,13 @@ angular.module("angular-growl").provider("growl", function () {
     if (styleClasses) {
       // only change the styles defined by the user
       // if not added to customized object then don't change default one
-      _styleClasses.success = styleClasses.success || _styleClasses.success;
-      _styleClasses.info = styleClasses.info || _styleClasses.info;
-      _styleClasses.warning = styleClasses.warning || _styleClasses.warning;
-      _styleClasses.error = styleClasses.error || _styleClasses.error;
+      if (typeof styleClasses === 'object') {
+        for (var k in styleClasses) {
+          if (styleClasses.hasOwnProperty(k)) {
+            _styleClasses[k] = styleClasses[k];
+          }
+        }
+      }
     }
     return this;
   };
