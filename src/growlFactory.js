@@ -18,8 +18,10 @@ angular.module("angular-growl").provider("growl", function () {
     _reverseOrder = false,
     _disableCountDown = false,
     _translateMessages = true,
+    _iconClasses = {success: 'icon alert-success', info: 'icon alert-info', warning: 'icon alert-warning',
+                     error: 'icon alert-error'},
     _styleClasses = {success: 'alert-success', info: 'alert-info', warning: 'alert-warning',
-                     error: 'alert-error', danger: 'alert-danger'};
+                     error: 'alert-error'};
 
   /**
    * set a global timeout (time to live) after which messages will be automatically closed
@@ -124,13 +126,30 @@ angular.module("angular-growl").provider("growl", function () {
   };
   
   /**
-   * sets the style classes to use related to a severity.
-   * 'danger' and 'error' are related to error severity, but have distinct styles
-   * 
+   * sets the message icon classes to use related to a severity.
+   *
+   * @param {object} iconClasses default: 
+   *     {success: 'icon alert-success', info: 'icon alert-info', warning: 'icon alert-warning',
+   *      error: 'icon alert-error'}
+   */
+  this.globalIconClasses = function (iconClasses) {
+    if (iconClasses) {
+      // only change the styles defined by the user
+      // if not added to customized object then don't change default one
+      _iconClasses.success = iconClasses.success || _iconClasses.success;
+      _iconClasses.info = iconClasses.info || _iconClasses.info;
+      _iconClasses.warning = iconClasses.warning || _iconClasses.warning;
+      _iconClasses.error = iconClasses.error || _iconClasses.error;
+    }
+    return this;
+  };
+  
+  /**
+   * sets the growl style classes to use related to a severity.
    *
    * @param {object} styleClasses default: 
    *     {success: 'alert-success', info: 'alert-info', warning: 'alert-warning',
-   *      error: 'alert-error', danger: 'alert-danger'}
+   *      error: 'alert-error'}
    */
   this.globalStyleClasses = function (styleClasses) {
     if (styleClasses) {
@@ -140,10 +159,10 @@ angular.module("angular-growl").provider("growl", function () {
       _styleClasses.info = styleClasses.info || _styleClasses.info;
       _styleClasses.warning = styleClasses.warning || _styleClasses.warning;
       _styleClasses.error = styleClasses.error || _styleClasses.error;
-      _styleClasses.danger = styleClasses.danger || _styleClasses.danger;
     }
     return this;
   };
+
 
   
   /**
@@ -284,7 +303,12 @@ angular.module("angular-growl").provider("growl", function () {
           info: (_config.styleClasses === undefined || _config.styleClasses.info === undefined) ? _styleClasses.info : _config.styleClasses.info,
           warning: (_config.styleClasses === undefined || _config.styleClasses.warning === undefined) ? _styleClasses.warning : _config.styleClasses.warning,
           error: (_config.styleClasses === undefined || _config.styleClasses.error === undefined) ? _styleClasses.error : _config.styleClasses.error,
-          danger: (_config.styleClasses === undefined || _config.styleClasses.danger === undefined) ? _styleClasses.danger : _config.styleClasses.danger,
+        },
+        iconClasses: {
+          success: (_config.iconClasses === undefined || _config.iconClasses.success === undefined) ? _iconClasses.success : _config.iconClasses.success,
+          info: (_config.iconClasses === undefined || _config.iconClasses.info === undefined) ? _iconClasses.info : _config.iconClasses.info,
+          warning: (_config.iconClasses === undefined || _config.iconClasses.warning === undefined) ? _iconClasses.warning : _config.iconClasses.warning,
+          error: (_config.iconClasses === undefined || _config.iconClasses.error === undefined) ? _iconClasses.error : _config.iconClasses.error,
         },
         destroy: function () {
           growlMessages.deleteMessage(message);
@@ -396,7 +420,11 @@ angular.module("angular-growl").provider("growl", function () {
     function position () {
       return _position;
     }
-    
+
+    function iconClasses () {
+      return _iconClasses;
+    }
+
     function styleClasses () {
       return _styleClasses;
     }
@@ -412,6 +440,7 @@ angular.module("angular-growl").provider("growl", function () {
       reverseOrder: reverseOrder,
       inlineMessages: inlineMessages,
       position: position,
+      iconClasses: iconClasses,
       styleClasses: styleClasses
     };
   }];
