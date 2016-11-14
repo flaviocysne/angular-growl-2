@@ -18,10 +18,11 @@ angular.module("angular-growl").provider("growl", function () {
     _reverseOrder = false,
     _disableCountDown = false,
     _translateMessages = true,
-    _iconClasses = {success: 'icon alert-success', info: 'icon alert-info', warning: 'icon alert-warning',
-                     error: 'icon alert-error'},
-    _styleClasses = {success: 'alert-success', info: 'alert-info', warning: 'alert-warning',
-                     error: 'alert-error'};
+    _severityNames = ["success", "info", "warning", "error"],
+    _iconClasses = {"success": "icon alert-success", "info": "icon alert-info", "warning": "icon alert-warning",
+                     "error": "icon alert-error"},
+    _styleClasses = {"success": "alert-success", "info": "alert-info", "warning": "alert-warning",
+                     "error": "alert-error"};
 
   /**
    * set a global timeout (time to live) after which messages will be automatically closed
@@ -122,6 +123,16 @@ angular.module("angular-growl").provider("growl", function () {
    */
   this.globalPosition = function (position) {
     _position = position;
+    return this;
+  };
+
+  /**
+   * set accepted severity names
+   *
+   * @param  {string[]} severityNames default: ["success", "info", "warning", "error"]
+   */
+  this.globalSeverityNames = function (severityNames) {
+    _severityNames = severityNames;
     return this;
   };
   
@@ -298,18 +309,8 @@ angular.module("angular-growl").provider("growl", function () {
         position: _config.position || _position,
         referenceId: _config.referenceId || _referenceId,
         translateMessage: _config.translateMessage === undefined ? _translateMessages : _config.translateMessage,
-        styleClasses: {
-          success: (_config.styleClasses === undefined || _config.styleClasses.success === undefined) ? _styleClasses.success : _config.styleClasses.success,
-          info: (_config.styleClasses === undefined || _config.styleClasses.info === undefined) ? _styleClasses.info : _config.styleClasses.info,
-          warning: (_config.styleClasses === undefined || _config.styleClasses.warning === undefined) ? _styleClasses.warning : _config.styleClasses.warning,
-          error: (_config.styleClasses === undefined || _config.styleClasses.error === undefined) ? _styleClasses.error : _config.styleClasses.error,
-        },
-        iconClasses: {
-          success: (_config.iconClasses === undefined || _config.iconClasses.success === undefined) ? _iconClasses.success : _config.iconClasses.success,
-          info: (_config.iconClasses === undefined || _config.iconClasses.info === undefined) ? _iconClasses.info : _config.iconClasses.info,
-          warning: (_config.iconClasses === undefined || _config.iconClasses.warning === undefined) ? _iconClasses.warning : _config.iconClasses.warning,
-          error: (_config.iconClasses === undefined || _config.iconClasses.error === undefined) ? _iconClasses.error : _config.iconClasses.error,
-        },
+        styleClasses: (_config.styleClasses === undefined || _config.styleClasses[severity] === undefined) ? _styleClasses.success : _config.styleClasses[severity],
+        iconClasses: (_config.iconClasses === undefined || _config.iconClasses[severity] === undefined) ? _iconClasses.success : _config.iconClasses[severity],
         destroy: function () {
           growlMessages.deleteMessage(message);
         },
