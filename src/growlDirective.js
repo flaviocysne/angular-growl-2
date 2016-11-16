@@ -10,11 +10,8 @@ angular.module("angular-growl").directive("growl", [
         reference: '@',
         inline: '=',
         limitMessages: '=',
-        successClass: '@',
-        infoClass: '@',
-        warningClass: '@',
-        errorClass: '@',
-        dangerClass: '@'
+        styles: '=', // custom css styles defined as json for each severity name {success: 'alert-thumbs-up'}
+        icons: '=' // custom icon styles defined as json for each severity name {success: 'icon-thumbs-up'}
       },
       controller: ['$scope', '$interval', 'growl', 'growlMessages',
         function ($scope, $interval, growl, growlMessages) {
@@ -47,23 +44,15 @@ angular.module("angular-growl").directive("growl", [
           
           $scope.alertClasses = function (message) {
             var _alertClasses = {};
-            
-            var _successClass = $scope.successClass === undefined ? growl.styleClasses().success : $scope.successClass;
-            var _infoClass = $scope.infoClass === undefined ? growl.styleClasses().info : $scope.infoClass;
-            var _warningClass = $scope.warningClass === undefined ? growl.styleClasses().warning : $scope.warningClass;
-            var _errorClass = $scope.errorClass === undefined ? growl.styleClasses().error : $scope.errorClass;
-            var _dangerClass = $scope.dangerClass === undefined ? growl.styleClasses().danger : $scope.dangerClass;
-            
+
             var _alertClasses = {
-              'icon': message.disableIcons === false,
               'alert-dismissable': !message.disableCloseButton
             };
-            
-            _alertClasses[_successClass] = message.severity === "success";
-            _alertClasses[_errorClass] = message.severity === "error"; //bootstrap 2.3
-            _alertClasses[_dangerClass] = message.severity === "error"; //bootstrap 3
-            _alertClasses[_infoClass] = message.severity === "info";
-            _alertClasses[_warningClass] = message.severity === "warning"; //bootstrap 3, no effect in bs 2.3
+
+            for (var _severity in message.severityNames()) {
+              var _styleClasses = $scope.styles === undefined || $scope.styles[_severity] === undefined ? message.styleClasses()[_severity] : $scope.styles[_severity];
+              _alertClasses[_styleClasses] = message.severity === _severity;
+            }
             
             return _alertClasses;
           };
@@ -102,8 +91,9 @@ angular.module("angular-growl").run(['$templateCache', function ($templateCache)
       '<div class="growl-item alert" ng-repeat="message in growlMessages.directives[referenceId].messages" ng-class="alertClasses(message)" ng-click="stopTimeoutClose(message)">' +
       '<button type="button" class="close" data-dismiss="alert" aria-hidden="true" ng-click="growlMessages.deleteMessage(message)" ng-if="!message.disableCloseButton">&times;</button>' +
       '<button type="button" class="close" aria-hidden="true" ng-if="showCountDown(message)">{{message.countdown}}</button>' +
+      '<span ng-class="iconClasses(message)" aria-hidden="true"></span>' +
       '<h4 class="growl-title" ng-if="message.title" ng-bind="message.title"></h4>' +
-      '<div class="growl-message" ng-bind-html="message.text"></div>' +
+      '<span class="growl-message" ng-bind-html="message.text"></span>' +
       '</div>' +
       '</div>'
     );
