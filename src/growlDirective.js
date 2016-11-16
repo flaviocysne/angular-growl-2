@@ -46,8 +46,9 @@ angular.module("angular-growl").directive("growl", [
             var _alertClasses = {
               'alert-dismissable': !message.disableCloseButton
             };
-
-            for (var _severity in growl.severityNames()) {
+            var count = growl.severityNames().length;
+            for (var i = 0; i < count; i++) {
+              var _severity = growl.severityNames()[i];
               var _style = $scope.styles === undefined || $scope.styles[_severity] === undefined ? growl.styleClasses()[_severity] : $scope.styles[_severity];
               _alertClasses[_style] = message.severity === _severity;
             }
@@ -57,8 +58,9 @@ angular.module("angular-growl").directive("growl", [
 
           $scope.iconClasses = function (message) {
             var _iconClasses = {};
-
-            for (var _severity in growl.severityNames()) {
+            var count = growl.severityNames().length;
+            for (var i = 0; i < count; i++) {
+              var _severity = growl.severityNames()[i];
               var _icon = $scope.icons === undefined || $scope.icons[_severity] === undefined ? growl.iconClasses()[_severity] : $scope.icons[_severity];
               _iconClasses[_icon] = message.severity === _severity;
             }
