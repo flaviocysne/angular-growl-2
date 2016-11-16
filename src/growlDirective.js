@@ -47,8 +47,8 @@ angular.module("angular-growl").directive("growl", [
               'alert-dismissable': !message.disableCloseButton
             };
 
-            for (var _severity in message.severityNames()) {
-              var _style = $scope.styles === undefined || $scope.styles[_severity] === undefined ? message.styleClasses()[_severity] : $scope.styles[_severity];
+            for (var _severity in growl.severityNames()) {
+              var _style = $scope.styles === undefined || $scope.styles[_severity] === undefined ? growl.styleClasses()[_severity] : $scope.styles[_severity];
               _alertClasses[_style] = message.severity === _severity;
             }
 
@@ -58,8 +58,8 @@ angular.module("angular-growl").directive("growl", [
           $scope.iconClasses = function (message) {
             var _iconClasses = {};
 
-            for (var _severity in message.severityNames()) {
-              var _icon = $scope.icons === undefined || $scope.icons[_severity] === undefined ? message.iconClasses()[_severity] : $scope.icons[_severity];
+            for (var _severity in growl.severityNames()) {
+              var _icon = $scope.icons === undefined || $scope.icons[_severity] === undefined ? growl.iconClasses()[_severity] : $scope.icons[_severity];
               _iconClasses[_icon] = message.severity === _severity;
             }
 
@@ -100,7 +100,7 @@ angular.module("angular-growl").run(['$templateCache', function ($templateCache)
       '<div class="growl-item alert" ng-repeat="message in growlMessages.directives[referenceId].messages" ng-class="alertClasses(message)" ng-click="stopTimeoutClose(message)">' +
       '<button type="button" class="close" data-dismiss="alert" aria-hidden="true" ng-click="growlMessages.deleteMessage(message)" ng-if="!message.disableCloseButton">&times;</button>' +
       '<button type="button" class="close" aria-hidden="true" ng-if="showCountDown(message)">{{message.countdown}}</button>' +
-      '<span ng-class="iconClasses(message)" aria-hidden="true" ng-if="!message.disableIcons()"></span>' +
+      '<span ng-class="iconClasses(message)" aria-hidden="true" ng-if="!message.disableIcons"></span>' +
       '<h4 class="growl-title" ng-if="message.title" ng-bind="message.title"></h4>' +
       '<span class="growl-message" ng-bind-html="message.text"></span>' +
       '</div>' +
