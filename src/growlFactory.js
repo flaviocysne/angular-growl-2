@@ -18,6 +18,7 @@ angular.module("angular-growl").provider("growl", function () {
     _reverseOrder = false,
     _disableCountDown = false,
     _translateMessages = true,
+    _defaultSeverity = "error",
     _severityNames = ["success", "info", "warning", "error"],
     _iconClasses = {"success": "icon alert-success", "info": "icon alert-info", "warning": "icon alert-warning",
                      "error": "icon alert-error"},
@@ -127,6 +128,16 @@ angular.module("angular-growl").provider("growl", function () {
   };
 
   /**
+   * set the default severity name used when message's severity is not defined
+   *
+   * @param  {string} defaultSeverity default: "error"
+   */
+  this.globalDefaultSeverity = function (defaultSeverity) {
+    _defaultSeverity = defaultSeverity;
+    return this;
+  };
+
+  /**
    * set accepted severity names
    *
    * @param  {string[]} severityNames default: ["success", "info", "warning", "error"]
@@ -135,7 +146,7 @@ angular.module("angular-growl").provider("growl", function () {
     _severityNames = severityNames;
     return this;
   };
-  
+
   /**
    * sets the message icon classes to use related to a severity.
    *
@@ -157,7 +168,7 @@ angular.module("angular-growl").provider("growl", function () {
     }
     return this;
   };
-  
+
   /**
    * sets the growl style classes to use related to a severity.
    *
@@ -180,8 +191,6 @@ angular.module("angular-growl").provider("growl", function () {
     return this;
   };
 
-
-  
   /**
    * sets the key in $http response the serverMessagesInterecptor is looking for server-sent messages, value of key
    * needs to be an array of objects
@@ -378,7 +387,7 @@ angular.module("angular-growl").provider("growl", function () {
      * @param {string} severity
      */
     function general (text, config, severity) {
-      severity = (severity || "error").toLowerCase();
+      severity = (severity || _defaultSeverity).toLowerCase();
       return sendMessage(text, config, severity);
     }
 
@@ -397,7 +406,7 @@ angular.module("angular-growl").provider("growl", function () {
         message = messages[i];
 
         if (message[_messageTextKey]) {
-          severity = (message[_messageSeverityKey] || "error").toLowerCase();
+          severity = (message[_messageSeverityKey] || _defaultSeverity).toLowerCase();
           var config = {};
           config.variables = message[_messageVariableKey] || {};
           config.title = message[_messageTitleKey];
@@ -427,6 +436,10 @@ angular.module("angular-growl").provider("growl", function () {
     function position () {
       return _position;
     }
+    
+    function severityNames() {
+      return _severityNames;
+    }
 
     function iconClasses () {
       return _iconClasses;
@@ -447,6 +460,7 @@ angular.module("angular-growl").provider("growl", function () {
       reverseOrder: reverseOrder,
       inlineMessages: inlineMessages,
       position: position,
+      severityNames: severityNames,
       iconClasses: iconClasses,
       styleClasses: styleClasses
     };
