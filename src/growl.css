@@ -90,14 +90,11 @@
 .growl-title {
   font-size: 16px;
 }
-.growl-item.icon > .growl-title {
-  margin: 0 0 0 40px;
-}
 
 /*
  * growl-message styles
  */
-.growl-item.icon > .growl-message {
+.growl-item > .icon {
   margin: 0 0 0 40px;
 }
 
